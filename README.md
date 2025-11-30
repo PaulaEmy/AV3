@@ -1,13 +1,12 @@
-LOGIN
-Administrador :
-  admin@aero.com
-  123
-Engenheiro :
-  eng@aero.com
-  123
-Operador:
-  op@aero.com
-  123
+# LOGIN
+
+Use essas contas para acessar o sistema após rodar o seed:
+
+| Função        | Email            | Senha |
+|---------------|------------------|-------|
+| Administrador | admin@aero.com   | 123   |
+| Engenheiro    | eng@aero.com     | 123   |
+| Operador      | op@aero.com      | 123   |
 
 ## Como rodar :
 Adicionar .env
@@ -24,6 +23,7 @@ Adicionar .env
 ## Instalar dependências:
     cd ./AV3
     npm install
+    
     cd /AV3
     cd ./av3_teste
     npm install
