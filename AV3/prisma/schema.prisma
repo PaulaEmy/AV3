@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model TipoAeronave {
+  tipo_aeronave String     @id
+  aeronaves     Aeronave[]
+}
+
+model TipoPeca {
+  tipo_peca String @id
+  pecas     Peca[]
+}
+
+model StatusPeca {
+  status_peca String @id
+  pecas       Peca[]
+}
+
+model StatusEtapa {
+  status_etapa String  @id
+  etapas       Etapa[]
+}
+
+model NivelPermissao {
+  nivel        String        @id
+  funcionarios Funcionario[]
+}
+
+model TipoTeste {
+  tipo_teste String  @id
+  testes     Teste[]
+}
+
+model ResultadoTeste {
+  resultado_teste String  @id
+  testes          Teste[]
+}
+
+model Aeronave {
+  codigo         Int          @id @default(autoincrement())
+  modelo         String
+  tipoAeronaveID String
+  tipo           TipoAeronave @relation(fields: [tipoAeronaveID], references: [tipo_aeronave])
+  capacidade     Int
+  alcance        Float
+  cliente        String
+
+  testes Teste[]
+  Peca   Peca[]
+}
+
+model Peca {
+  id_peca Int @id @default(autoincrement())
+  nomePeca   String
+  tipoPecaID String
+  tipoPeca   TipoPeca @relation(fields: [tipoPecaID], references: [tipo_peca])
+  fornecedor String
+  statusPecaID String
+  statusPeca   StatusPeca @relation(fields: [statusPecaID], references: [status_peca])
+  aeronaveID Int?
+  aeronave   Aeronave? @relation(fields: [aeronaveID], references: [codigo])
+}
+
+model Funcionario {
+  funcionario_id   Int            @id @default(autoincrement())
+  nome             String
+  telefone         String
+  endereco         String
+  usuario          String
+  senha            String
+  nivelPermissaoID String
+  nivelPermissao   NivelPermissao @relation(fields: [nivelPermissaoID], references: [nivel])
+  etapas           Etapa[]        @relation("FuncionariosEtapas")
+}
+
+model Etapa {
+  id_etapa      Int           @id @default(autoincrement())
+  prazo         String
+  statusEtapaID String
+  statusEtapa   StatusEtapa   @relation(fields: [statusEtapaID], references: [status_etapa])
+  funcionarios  Funcionario[] @relation("FuncionariosEtapas")
+}
+
+model Teste {
+  id_teste         Int            @id @default(autoincrement())
+  resultadoTesteID String
+  resultadoTeste   ResultadoTeste @relation(fields: [resultadoTesteID], references: [resultado_teste])
+
+  aeronaveID Int
+  aeronave   Aeronave @relation(fields: [aeronaveID], references: [codigo])
+
+  tipoTesteID String
+  tipoTeste   TipoTeste @relation(fields: [tipoTesteID], references: [tipo_teste])
+}
